@@ -23,14 +23,20 @@ function App() {
   // Simulate live data
   useEffect(() => {
     const apps = [
-      { name: "Instagram Reels", isReels: true },
-      { name: "YouTube Shorts", isReels: true },
-      { name: "Snapchat Video", isReels: true },
-      { name: "WhatsApp Chat", isReels: false },
-      { name: "Spotify Audio", isReels: false },
-      { name: "Google Browsing", isReels: false },
-      { name: "TikTok", isReels: true },
-      { name: "Email Sync", isReels: false }
+      // Real-Time
+      { name: "WhatsApp Call", isRealTime: true },
+      { name: "Zoom Meeting", isRealTime: true },
+      { name: "Fortnite", isRealTime: true },
+      { name: "Discord Voice", isRealTime: true },
+      { name: "FaceTime", isRealTime: true },
+
+      // Non-Real-Time
+      { name: "Google Browsing", isRealTime: false },
+      { name: "YouTube Video", isRealTime: false },
+      { name: "Instagram Reels", isRealTime: false },
+      { name: "Gmail Sync", isRealTime: false },
+      { name: "Spotify Music", isRealTime: false },
+      { name: "Microsoft Docs", isRealTime: false }
     ];
 
     const protocols = ["TCP", "UDP"];
@@ -47,11 +53,11 @@ function App() {
         const app1 = apps[Math.floor(Math.random() * apps.length)];
         setUe1({
           app: app1.name,
-          type: app1.isReels ? "REELS" : "NON-REELS",
+          type: app1.isRealTime ? "REAL-TIME" : "NON-REAL-TIME",
           confidence: `${Math.floor(Math.random() * 15) + 85}%`,
-          qos: app1.isReels
-            ? "Medium BW, High Burst Tolerance"
-            : "Low Priority, Low Latency"
+          qos: app1.isRealTime
+            ? "Low Latency, Low Jitter, High Priority"
+            : "Medium Latency OK, Low Priority"
         });
         setLogs1(prev => [generateLog(1, app1), ...prev.slice(0, 49)]);
       }
@@ -61,11 +67,11 @@ function App() {
         const app2 = apps[Math.floor(Math.random() * apps.length)];
         setUe2({
           app: app2.name,
-          type: app2.isReels ? "REELS" : "NON-REELS",
+          type: app2.isRealTime ? "REAL-TIME" : "NON-REAL-TIME",
           confidence: `${Math.floor(Math.random() * 15) + 85}%`,
-          qos: app2.isReels
-            ? "Medium BW, High Burst Tolerance"
-            : "Low Priority, Low Latency"
+          qos: app2.isRealTime
+            ? "Low Latency, Low Jitter, High Priority"
+            : "Medium Latency OK, Low Priority"
         });
         setLogs2(prev => [generateLog(2, app2), ...prev.slice(0, 49)]);
       }
@@ -78,18 +84,18 @@ function App() {
     <div className="app">
       <header className="header">
         <h1>GadaSoftware</h1>
-        <p>Network Intelligence Dashboard | Reels vs Non-Reels Detection</p>
+        <p>Network Intelligence Dashboard | Real-Time vs Non-Real-Time Detection</p>
       </header>
 
       <main className="dashboard">
         {/* User Cards */}
         <div className="user-section">
-          <div className={`ue-card ${ue1.type === 'REELS' ? 'reels' : 'non-reels'}`}>
+          <div className={`ue-card ${ue1.type === 'REAL-TIME' ? 'realtime' : 'non-realtime'}`}>
             <h2>UE-1: Smartphone</h2>
             <p><strong>Current App:</strong> {ue1.app}</p>
           </div>
 
-          <div className={`ue-card ${ue2.type === 'REELS' ? 'reels' : 'non-reels'}`}>
+          <div className={`ue-card ${ue2.type === 'REAL-TIME' ? 'realtime' : 'non-realtime'}`}>
             <h2>UE-2: Tablet</h2>
             <p><strong>Current App:</strong> {ue2.app}</p>
           </div>

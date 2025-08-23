@@ -86,14 +86,24 @@ html {
   font-size: 0.95rem;
 }
 
-.ue-card.reels {
-  border-color: #f00;
-  box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+.ue-card.realtime {
+  border-color: #0f0;
+  box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
 }
 
-.ue-card.reels h2,
-.ue-card.reels p {
-  color: #f00;
+.ue-card.realtime h2,
+.ue-card.realtime p {
+  color: #0f0;
+}
+
+.ue-card.non-realtime {
+  border-color: #f0f;
+  box-shadow: 0 0 15px rgba(255, 0, 255, 0.5);
+}
+
+.ue-card.non-realtime h2,
+.ue-card.non-realtime p {
+  color: #f0f;
 }
 
 /* Logs Section */
@@ -172,16 +182,16 @@ html {
   font-size: 0.9rem;
 }
 
-.badge.REELS {
-  background: #330000;
-  color: #f00;
-  border: 1px solid #f00;
+.badge.REAL-TIME {
+  background: #001100;
+  color: #0f0;
+  border: 1px solid #0f0;
 }
 
-.badge.NON-REELS {
-  background: #001133;
-  color: #00f;
-  border: 1px solid #00f;
+.badge.NON-REAL-TIME {
+  background: #110011;
+  color: #f0f;
+  border: 1px solid #f0f;
 }
 
 .highlight {
