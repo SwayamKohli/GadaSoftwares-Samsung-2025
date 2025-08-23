@@ -1,0 +1,240 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body,
+html {
+  background: #000;
+  color: #0f0;
+  font-family: 'Courier New', monospace;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.app {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+}
+
+/* Header */
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+  text-shadow: 0 0 10px #00f, 0 0 20px #00f;
+  color: #00f;
+  border-bottom: 1px solid #00f;
+  padding-bottom: 10px;
+}
+
+.header h1 {
+  font-size: 2.8rem;
+  letter-spacing: 2px;
+  animation: pulse 2s infinite;
+}
+
+.header p {
+  color: #0f0;
+  font-size: 0.9rem;
+  margin-top: 5px;
+}
+
+/* Dashboard */
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  align-items: center;
+}
+
+/* User Cards */
+.user-section {
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.ue-card {
+  background: #0a0a1a;
+  border: 1px solid #00f;
+  border-radius: 12px;
+  padding: 20px;
+  width: 350px;
+  box-shadow: 0 0 15px rgba(0, 0, 255, 0.5);
+  transition: all 0.3s;
+}
+
+.ue-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0 20px rgba(0, 255, 0, 0.6);
+}
+
+.ue-card h2 {
+  color: #00f;
+  margin-bottom: 12px;
+  font-size: 1.3rem;
+}
+
+.ue-card p {
+  color: #0f0;
+  margin: 8px 0;
+  font-size: 0.95rem;
+}
+
+.ue-card.reels {
+  border-color: #f00;
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+}
+
+.ue-card.reels h2,
+.ue-card.reels p {
+  color: #f00;
+}
+
+/* Logs Section */
+.logs-section {
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.log-container {
+  background: #000;
+  border: 1px solid #00f;
+  border-radius: 8px;
+  width: 500px;
+  margin: 10px 0;
+  box-shadow: 0 0 15px rgba(0, 0, 255, 0.5);
+}
+
+.log-container h3 {
+  color: #00f;
+  margin-bottom: 10px;
+  text-align: center;
+  text-shadow: 0 0 8px rgba(0, 0, 255, 0.7);
+}
+
+.log-frame {
+  background: #000;
+  border: 1px solid #00f;
+  border-radius: 8px;
+  height: 180px;
+  overflow-y: auto;
+  padding: 10px;
+  font-family: 'Courier New', monospace;
+  color: #0f0;
+  scrollbar-color: #00f #000;
+  scrollbar-width: thin;
+}
+
+.log-entry {
+  padding: 4px 0;
+  border-bottom: 1px dashed #003366;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+/* Status Section */
+.status-section {
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+  width: 90%;
+  max-width: 1200px;
+  flex-wrap: wrap;
+}
+
+.status-box {
+  background: #0a0a1a;
+  border: 1px solid #00f;
+  border-radius: 12px;
+  padding: 20px;
+  width: 400px;
+  color: #0f0;
+}
+
+.status-box h3 {
+  color: #00f;
+  margin-bottom: 15px;
+}
+
+.badge {
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.badge.REELS {
+  background: #330000;
+  color: #f00;
+  border: 1px solid #f00;
+}
+
+.badge.NON-REELS {
+  background: #001133;
+  color: #00f;
+  border: 1px solid #00f;
+}
+
+.highlight {
+  color: #0f0;
+  font-weight: bold;
+}
+
+.qos {
+  color: #00f;
+  font-size: 0.9rem;
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  color: #00f;
+  font-size: 0.8rem;
+  margin-top: 30px;
+  padding-top: 10px;
+  border-top: 1px solid #00f;
+  opacity: 0.8;
+}
+
+/* Animations */
+@keyframes pulse {
+  0% {
+    text-shadow: 0 0 10px #00f, 0 0 20px #00f;
+  }
+
+  50% {
+    text-shadow: 0 0 20px #00f, 0 0 40px #00f, 0 0 60px #0f0;
+  }
+
+  100% {
+    text-shadow: 0 0 10px #00f, 0 0 20px #00f;
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+
+  .user-section,
+  .logs-section,
+  .status-section {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .ue-card,
+  .status-box,
+  .log-container {
+    width: 90%;
+  }
+}
