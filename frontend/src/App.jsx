@@ -20,62 +20,93 @@ function App() {
   const [logs1, setLogs1] = useState([]);
   const [logs2, setLogs2] = useState([]);
 
-  // Simulate live data
+  // Simulate live data with real API
   useEffect(() => {
-    const apps = [
-      // Real-Time
-      { name: "WhatsApp Call", isRealTime: true },
-      { name: "Zoom Meeting", isRealTime: true },
-      { name: "Fortnite", isRealTime: true },
-      { name: "Discord Voice", isRealTime: true },
-      { name: "FaceTime", isRealTime: true },
+    const fetchPrediction = async (ueId) => {
+      // Generate realistic flow features (match training data)
+      const features = {
+        "Source.Port": Math.floor(Math.random() * 65535),
+        "Destination.Port": [80, 443, 5060, 1935, 3478, 53, 25][Math.floor(Math.random() * 7)],
+        "Flow.Duration": Math.random() * 5000,
+        "Total.Fwd.Packets": Math.floor(Math.random() * 50),
+        "Total.Backward.Packets": Math.floor(Math.random() * 50),
+        "Flow.Packets.s": Math.random() * 2000,
+        "Fwd.Packet.Length.Max": Math.floor(Math.random() * 1500),
+        "Flow.IAT.Max": Math.random() * 2000,
+        "Bwd.Packet.Length.Max": Math.floor(Math.random() * 1500),
+        "Init_Win_bytes_forward": Math.floor(Math.random() * 65535),
+        "Init_Win_bytes_backward": Math.floor(Math.random() * 65535),
+        "Timestamp_Formatted": Math.floor(Date.now() / 1000)
+      };
 
-      // Non-Real-Time
-      { name: "Google Browsing", isRealTime: false },
-      { name: "YouTube Video", isRealTime: false },
-      { name: "Instagram Reels", isRealTime: false },
-      { name: "Gmail Sync", isRealTime: false },
-      { name: "Spotify Music", isRealTime: false },
-      { name: "Microsoft Docs", isRealTime: false }
-    ];
+      try {
+        // Call backend /predict
+        const response = await fetch('http://localhost:8000/predict', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ features })
+        });
 
-    const protocols = ["TCP", "UDP"];
-    const generateLog = (id, app) => {
-      const protocol = protocols[Math.floor(Math.random() * protocols.length)];
-      const size = Math.floor(Math.random() * 1500) + 64;
-      const duration = (Math.random() * 10).toFixed(2);
-      return `[UE-${id}] ${new Date().toLocaleTimeString()} | App: ${app.name} | Proto: ${protocol} | Size: ${size}B | Dur: ${duration}s`;
+        if (!response.ok) throw new Error('Prediction failed');
+
+        const result = await response.json();
+
+        // Fetch QoS policy
+        const qosResponse = await fetch(`http://localhost:8000/qos?class_label=${result.klass}`);
+        const qosData = await qosResponse.json();
+
+        // Format confidence
+        const confidence = result.confidence
+          ? `${(result.confidence * 100).toFixed(1)}%`
+          : 'N/A';
+
+        // Update UE state
+        const appNames = {
+          'Real-Time': ['WhatsApp Call', 'Zoom Meeting', 'Fortnite', 'FaceTime', 'Discord Voice'],
+          'Non-Real-Time': ['Google Browsing', 'YouTube Video', 'Instagram Reels', 'Gmail Sync', 'Spotify Music', 'Microsoft Docs']
+        };
+        const appList = result.klass === 'Real-Time' ? appNames['Real-Time'] : appNames['Non-Real-Time'];
+        const appName = appList[Math.floor(Math.random() * appList.length)];
+
+        if (ueId === 1) {
+          setUe1({
+            app: appName,
+            type: result.klass.toUpperCase(),
+            confidence,
+            qos: Object.entries(qosData.qos)
+              .map(([k, v]) => `${k}: ${v}`)
+              .join(', ')
+          });
+          setLogs1(prev => [
+            `[UE-1] ${new Date().toLocaleTimeString()} | App: ${appName} | Pred: ${result.klass} (${result.confidence?.toFixed(2)})`,
+            ...prev.slice(0, 49)
+          ]);
+        } else {
+          setUe2({
+            app: appName,
+            type: result.klass.toUpperCase(),
+            confidence,
+            qos: Object.entries(qosData.qos)
+              .map(([k, v]) => `${k}: ${v}`)
+              .join(', ')
+          });
+          setLogs2(prev => [
+            `[UE-2] ${new Date().toLocaleTimeString()} | App: ${appName} | Pred: ${result.klass} (${result.confidence?.toFixed(2)})`,
+            ...prev.slice(0, 49)
+          ]);
+        }
+
+      } catch (err) {
+        console.error("API Error:", err);
+        // Optional: show error in UI
+      }
     };
 
+    // Poll every 3 seconds
     const interval = setInterval(() => {
-      // Randomly update UE-1
-      if (Math.random() > 0.7) {
-        const app1 = apps[Math.floor(Math.random() * apps.length)];
-        setUe1({
-          app: app1.name,
-          type: app1.isRealTime ? "REAL-TIME" : "NON-REAL-TIME",
-          confidence: `${Math.floor(Math.random() * 15) + 85}%`,
-          qos: app1.isRealTime
-            ? "Low Latency, Low Jitter, High Priority"
-            : "Medium Latency OK, Low Priority"
-        });
-        setLogs1(prev => [generateLog(1, app1), ...prev.slice(0, 49)]);
-      }
-
-      // Randomly update UE-2
-      if (Math.random() > 0.7) {
-        const app2 = apps[Math.floor(Math.random() * apps.length)];
-        setUe2({
-          app: app2.name,
-          type: app2.isRealTime ? "REAL-TIME" : "NON-REAL-TIME",
-          confidence: `${Math.floor(Math.random() * 15) + 85}%`,
-          qos: app2.isRealTime
-            ? "Low Latency, Low Jitter, High Priority"
-            : "Medium Latency OK, Low Priority"
-        });
-        setLogs2(prev => [generateLog(2, app2), ...prev.slice(0, 49)]);
-      }
-    }, 1500);
+      fetchPrediction(1);
+      fetchPrediction(2);
+    }, 3000);
 
     return () => clearInterval(interval);
   }, []);
