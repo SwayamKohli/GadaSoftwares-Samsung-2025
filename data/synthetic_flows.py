@@ -1,70 +1,101 @@
-from __future__ import annotations
+"""
+Generate synthetic flow data with features matching the trained model.
+"""
+
 import numpy as np
-from typing import List, Dict
+from typing import List, Dict, Any
+import random
 
-
-FEATURE_ORDER = [
-    "duration_s",
-    "packets",
-    "bytes",
-    "avg_pkt_size",
-    "flow_iat_mean_ms",
-    "flow_iat_std_ms",
-    "burstiness",
-    "down_up_ratio",
-    "protocol_udp",   # 1 for UDP, 0 otherwise
-    "dport",          # destination port
+FEATURE_NAMES = [
+    'Source.Port',
+    'Destination.Port',
+    'Flow.Duration',
+    'Total.Fwd.Packets',
+    'Total.Backward.Packets',
+    'Flow.Packets.s',
+    'Fwd.Packet.Length.Max',
+    'Flow.IAT.Max',
+    'Bwd.Packet.Length.Max',
+    'Init_Win_bytes_forward',
+    'Init_Win_bytes_backward',
+    'Timestamp_Formatted'
 ]
 
+# Common ports
+WEB_PORTS = [80, 443, 8080]
+VOIP_PORTS = [5060, 5061]
+MEDIA_PORTS = [1935, 8081, 554]  # RTMP, RTSP
+GAMING_PORTS = [3074, 27015, 3478]  # Xbox, Steam, STUN
+EMAIL_PORTS = [25, 465, 587, 110, 995, 143, 993]
 
-def generate_flows(n: int = 50, seed: int = 42) -> List[Dict[str, float]]:
+
+def generate_flow(is_real_time: bool, seed: int = None) -> Dict[str, Any]:
     rng = np.random.default_rng(seed)
-    flows: List[Dict[str, float]] = []
 
-    for _ in range(n):
-        is_rt = rng.uniform() < 0.5
+    if is_real_time:
+        # Real-Time: VoIP, Gaming, Video Calls
+        dest_port = random.choice(VOIP_PORTS + GAMING_PORTS + [1935])
+        flow_duration = rng.uniform(1, 120)  # short to medium
+        fwd_packets = rng.integers(5, 500)
+        bwd_packets = rng.integers(5, 500)
+        flow_packets_s = (fwd_packets + bwd_packets) / flow_duration
+        fwd_pkt_max = rng.uniform(60, 500)
+        bwd_pkt_max = rng.uniform(60, 500)
+        flow_iat_max = rng.uniform(1, 50)  # low max IAT
+        init_win_fwd = rng.integers(2000, 32768)
+        init_win_bwd = rng.integers(2000, 32768)
+        label = "Real-Time"
+    else:
+        # Non-Real-Time: Browsing, Email, Streaming, Reels
+        dest_port = random.choice(WEB_PORTS + EMAIL_PORTS + [8080])
+        flow_duration = rng.uniform(10, 1800)  # longer
+        fwd_packets = rng.integers(10, 2000)
+        bwd_packets = rng.integers(5, 1000)
+        flow_packets_s = (fwd_packets + bwd_packets) / flow_duration
+        fwd_pkt_max = rng.uniform(400, 1500)
+        bwd_pkt_max = rng.uniform(60, 1400)
+        flow_iat_max = rng.uniform(50, 2000)  # higher max IAT
+        init_win_fwd = rng.integers(4000, 65535)
+        init_win_bwd = rng.integers(4000, 65535)
+        label = "Non-Real-Time"
 
-        if is_rt:
-            # Real-time-ish: small packets, higher packet rate, low IAT & jitter
-            duration_s = rng.uniform(1, 60)
-            packets = rng.integers(200, 1200)
-            avg_pkt_size = rng.uniform(60, 300)
-            bytes_ = packets * avg_pkt_size
-            flow_iat_mean_ms = rng.uniform(1, 15)
-            flow_iat_std_ms = rng.uniform(0.5, 5)
-            burstiness = rng.uniform(0.05, 0.3)
-            down_up_ratio = rng.uniform(0.6, 1.6)
-            protocol_udp = 1
-            dport = int(rng.choice([5060, 3478, 16384, 5004, 4000]))
-            label = "Real-Time"
-        else:
-            # Non-real-time-ish: larger packets, bursty, higher IAT & jitter
-            duration_s = rng.uniform(5, 1800)
-            packets = rng.integers(20, 3000)
-            avg_pkt_size = rng.uniform(400, 1400)
-            bytes_ = packets * avg_pkt_size
-            flow_iat_mean_ms = rng.uniform(20, 500)
-            flow_iat_std_ms = rng.uniform(10, 300)
-            burstiness = rng.uniform(0.3, 1.0)
-            down_up_ratio = rng.uniform(1.0, 5.0)
-            protocol_udp = 0
-            dport = int(rng.choice([80, 443, 21, 22, 25, 8080]))
-            label = "Non-Real-Time"
+    # Random source port
+    src_port = rng.integers(1024, 65535)
 
-        flows.append({
-            "label": label,
-            "features": {
-                "duration_s": float(duration_s),
-                "packets": int(packets),
-                "bytes": float(bytes_),
-                "avg_pkt_size": float(avg_pkt_size),
-                "flow_iat_mean_ms": float(flow_iat_mean_ms),
-                "flow_iat_std_ms": float(flow_iat_std_ms),
-                "burstiness": float(burstiness),
-                "down_up_ratio": float(down_up_ratio),
-                "protocol_udp": int(protocol_udp),
-                "dport": int(dport),
-            }
-        })
+    # Current timestamp
+    timestamp = 1672531200 + rng.integers(0, 3600 * 24 * 30)  # ~30 days
+
+    features = {
+        'Source.Port': int(src_port),
+        'Destination.Port': int(dest_port),
+        'Flow.Duration': float(flow_duration),
+        'Total.Fwd.Packets': int(fwd_packets),
+        'Total.Backward.Packets': int(bwd_packets),
+        'Flow.Packets.s': float(flow_packets_s),
+        'Fwd.Packet.Length.Max': float(fwd_pkt_max),
+        'Flow.IAT.Max': float(flow_iat_max),
+        'Bwd.Packet.Length.Max': float(bwd_pkt_max),
+        'Init_Win_bytes_forward': int(init_win_fwd),
+        'Init_Win_bytes_backward': int(init_win_bwd),
+        'Timestamp_Formatted': int(timestamp)
+    }
+
+    return {
+        "label": label,
+        "features": features
+    }
+
+
+def generate_flows(n: int = 20, seed: int = 42) -> List[Dict[str, Any]]:
+    """
+    Generate n synthetic flows, balanced between Real-Time and Non-Real-Time.
+    """
+    rng = np.random.default_rng(seed)
+    flows = []
+
+    for i in range(n):
+        is_rt = rng.choice([True, False])  # Balanced
+        flow = generate_flow(is_rt, seed=seed + i)
+        flows.append(flow)
 
     return flows
