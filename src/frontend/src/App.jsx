@@ -191,12 +191,20 @@ function App() {
           <div className="page welcome">
             <div className="background-effects"></div>
             <header className="header">
-              <h1>CATO</h1>
-              <p>Classification of Application Traffic Online</p>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem' }}>
+                {/* Left Cat */}
+                <img src="/CATO.jpg" alt="CATO Cat" className="cat-img" style={{ width: '60px', height: '60px', borderRadius: '50%' }} />
+                <div style={{ textAlign: 'center' }}>
+                  <h1>CATO</h1>
+                  <p>Classification of Application Traffic Online</p>
+                </div>
+                {/* Right Cat */}
+                <img src="/CATO.jpg" alt="CATO Cat" className="cat-img" style={{ width: '60px', height: '60px', borderRadius: '50%' }} />
+              </div>
             </header>
             <main className="content welcome-content">
               <h2>Welcome to CATO</h2>
-              <p>Using real-world test data </p>
+              <p>Using real-world test data</p>
               <button className="btn-primary" onClick={() => setPage('dashboard')}>
                 Start Monitoring
               </button>
