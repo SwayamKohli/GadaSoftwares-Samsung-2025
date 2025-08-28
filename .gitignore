@@ -1,8 +1,8 @@
 # .gitignore 
-model\*.pkl 
-data\*.csv 
+model
+data
 __pycache__\ 
 *.pyc 
-venv\ 
-.vscode\ 
-0old\ 
+venv
+.vscode
+0old
