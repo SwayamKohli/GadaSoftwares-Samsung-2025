@@ -4,9 +4,9 @@
 
 **Team name** - GadaSoftwares
 
-**Team members (Names)** - Swayam Kohli (Leader), Mahak Singh, Archit Sahay, Maitreyi Jha
+**Team members (Names)** - [Swayam Kohli (Leader)](https://github.com/SwayamKohli), [Mahak Singh](https://github.com/Mahak0205), [Archit Sahay](https://github.com/arcfr), [Maitreyi Jha](https://github.com/Maitreyi-Jha)
 
-**Demo Video Link** - https://www.youtube.com/watch?v=your_video_id
+**Demo Video Link** - [https://youtu.be/wdI0Zr8693M](https://youtu.be/wdI0Zr8693M)
 
 ---
 
