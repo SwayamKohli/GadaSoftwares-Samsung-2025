@@ -4,7 +4,7 @@ CATO follows a **modular, layered architecture** designed for scalability, maint
 
 ## High-Level Diagram
 
-![CATO Architecture Diagram](images/architecture.png)
+![CATO Architecture Diagram](images/CATOArchitecture.jpg)
 
 
 
@@ -90,3 +90,4 @@ CATO follows a **modular, layered architecture** designed for scalability, maint
 ---
 
 > 🔗 [Back to README](../README.md)
+
