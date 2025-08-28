@@ -1,28 +1,8 @@
-# Node modules
-node_modules/
-npm-debug.log
-yarn-error.log
-
-# Frontend build
-/frontend/dist
-/frontend/build
-
-# Backend
-/backend/__pycache__
-/backend/*.pyc
-
-# Model
-/model/*.pkl
-model/model.pkl
-
-# Environment variables
-.env
-.env.local
-
-# OS
-.DS_Store
-Thumbs.db
-Desktop.ini
-
-#Venv
-Venv
+# .gitignore 
+model\*.pkl 
+data\*.csv 
+__pycache__\ 
+*.pyc 
+venv\ 
+.vscode\ 
+0old\ 
