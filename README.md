@@ -1,10 +1,10 @@
 # Samsung EnnovateX 2025 AI Challenge Submission
 
-**Problem Statement** - AI for Network Intelligence: Classify and Optimize Multi-User Traffic 
+**Problem Statement** - Classify User Application Traffic at the Network in a Multi-UE Connected Scenario
 
 **Team name** - GadaSoftwares
 
-**Team members (Names)** - Swayam Kohli [Leader], Mahak Singh, Archit Sahay, Maitreyi Jha
+**Team members (Names)** - Swayam Kohli (Leader), Mahak Singh, Archit Sahay, Maitreyi Jha
 
 **Demo Video Link** - https://www.youtube.com/watch?v=your_video_id
 
@@ -14,31 +14,36 @@
 
 ### Technical Documentation
 All technical details are in the `docs/` folder:
-- `approach.md`: Our solution approach and uniqueness
-- `architecture.md`: System architecture
-- `installation.md`: Setup instructions
-- `user_guide.md`: How to use the dashboard
-- `features.md`: Salient features and screenshots
+- `approach.md`: Solution approach and novelty
+- `architecture.md`: System architecture and component flow
+- `installation.md`: Step-by-step setup guide
+- `user_guide.md`: Dashboard navigation and interaction
+- `features.md`: Key features and screenshots
 
 ### Source Code
-All source code is in the `src/` folder:
-- `src/backend/`: FastAPI server, prediction, QoS engine
-- `src/frontend/`: React dashboard, real-time UI
+The complete project source code is in the `src/` folder:
+- `src/backend/`: FastAPI server, ML inference, QoS engine
+- `src/frontend/`: React + Vite dashboard, real-time UI, multi-UE monitoring
 
 ### Models Used
-None (we trained our own)
+None (we used only self-developed models)
 
 ### Models Published
-- **ReelGuard Multi-Class Traffic Classifier**  
-  🤗 [https://huggingface.co/GadaSoftware/ReelGuard-MultiClass-RF](https://huggingface.co/GadaSoftware/ReelGuard-MultiClass-RF)
+- **CATO Multi-Class Traffic Classifier**  
+  🤗 [https://huggingface.co/ArcFR/Network_Traffic_Classifer/tree/main](https://huggingface.co/ArcFR/Network_Traffic_Classifer/tree/main)
 
 ### Datasets Used
-- `Samsung_dataset.csv` (internal training)
-- `website_testing.csv` (real-world test data)
-
-### Datasets Published
-- **ReelGuard Real-World Traffic Test Set**  
-  🤗 [https://huggingface.co/datasets/GadaSoftware/ReelGuard-Test-Data](https://huggingface.co/datasets/GadaSoftware/ReelGuard-Test-Data)
+- `Samsung_dataset.csv` – Public dataset provided for training (used internally)
+- `website_testing.csv` – Real-world encrypted traffic flows for testing
+- 🔗 https://www.kaggle.com/datasets/jsrojas/ip-network-traffic-flows-labeled-with-87-apps
+- 🔗 https://www.kaggle.com/datasets/kimdaegyeom/5g-traffic-datasets/data
 
 ### Attribution
-This project is built from scratch during the hackathon. No existing open-source project was used as a base.
+This project was built entirely from scratch during the hackathon. No existing open-source project was used as a base. All components — including the machine learning model, QoS engine, backend API, and frontend dashboard — were developed in-house by Team GadaSoftware.
+
+The solution strictly uses:
+- Open-source libraries (MIT/Apache 2.0 licensed): scikit-learn, FastAPI, React, Vite
+- Public datasets: `Samsung_dataset.csv`, `website_testing.csv`
+- Self-developed code and models
+
+No third-party APIs, cloud services, or proprietary tools were used.
